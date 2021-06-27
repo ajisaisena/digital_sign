@@ -48,7 +48,7 @@ def get_inv(num, mod):
     return extended_gcd(nums, mods)
 
 
-def hash(mes):
+def sha1_hash(mes):
     digest = hashes.Hash(hashes.SHA1())
     digest.update(mes)
     return digest.finalize()
@@ -102,13 +102,26 @@ def is_prime(p):
 
 
 def bytes_xor(a, b, lens=None):
+    """
+    字节串异或函数
+    :param a: 字节串a,bytes
+    :param b: 字节串b,bytes
+    :param lens: 指定输出长度,以字节计算,int
+    :return: 字节串异或结果
+    """
     return align(int(a.hex(), 16) ^ int(b.hex(), 16), lens)
 
 
 def align(num, lens=None):
+    """
+    字节对齐函数
+    :param num: 用于对其的值,int
+    :param lens: 指定输出长度,int
+    :return: 字节对齐结果
+    """
     if lens is None:
-        string = '0'+hex(num)[2:] if len(hex(num)) % 2 != 0 else hex(num)[2:]
+        string = '0' + hex(num)[2:] if len(hex(num)) % 2 != 0 else hex(num)[2:]
         return bytes.fromhex(string)
     else:
-        string = '{:0{}x}'.format(num, 2*lens)
+        string = '{:0{}x}'.format(num, 2 * lens)
         return bytes.fromhex(string)

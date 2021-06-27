@@ -1,2 +1,9 @@
-sympy
-cryptography
+autopep8==1.5.7
+cffi==1.14.5
+cryptography==3.4.7
+gmssl==3.2.1
+mpmath==1.2.1
+pycodestyle==2.7.0
+pycparser==2.20
+sympy==1.8
+toml==0.10.2
