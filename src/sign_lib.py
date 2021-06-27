@@ -1,4 +1,5 @@
 from cryptography.hazmat.primitives import hashes
+from random import randint
 
 
 def fast_pow(x, n, m):
@@ -61,3 +62,53 @@ def gcd(a, b):
     :return: a和b的最大公因数，int
     """
     return a if b == 0 else gcd(b, a % b)
+
+
+def miller_rabin(p):
+    """
+    miller_rabin素性检测
+    :param p: 用于检测的素数p, int
+    :return: 是素数(True)或不是素数(False)
+    """
+    random_time = 10  # 用一个很小的数亦可；这个数是随手打的
+    if p < 3:
+        return p == 2  # 先进行2判定
+    q = p - 1
+    t = 0
+    while q % 2 == 0:  # 先把q和t求好
+        q //= 2
+        t += 1
+    for i in range(1, random_time + 1):  # 进行random_time次检测
+        a = randint(2, p - 1)
+        v = fast_pow(a, q, p)
+        if v == 1 or v == p - 1:  # 进行1或-1判定
+            continue
+        for j in range(t + 1):
+            v = v * v % p
+            if v == p - 1:
+                break
+        else:
+            return False
+    return True
+
+
+def is_prime(p):
+    """
+    素性检测接口
+    :param p: 用于检测的参数p, int
+    :return: 是素数(True)或不是素数(False)
+    """
+    return miller_rabin(p)
+
+
+def bytes_xor(a, b, lens=None):
+    return align(int(a.hex(), 16) ^ int(b.hex(), 16), lens)
+
+
+def align(num, lens=None):
+    if lens is None:
+        string = '0'+hex(num)[2:] if len(hex(num)) % 2 != 0 else hex(num)[2:]
+        return bytes.fromhex(string)
+    else:
+        string = '{:0{}x}'.format(num, 2*lens)
+        return bytes.fromhex(string)
